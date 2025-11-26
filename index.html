@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Naked Dojo · Florida Naturist Venue Console · v3.1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-elevated: #020617;
+      --bg-panel: #020617;
+      --border-subtle: rgba(148, 163, 184, 0.25);
+      --text-main: #e5e7eb;
+      --text-soft: #9ca3af;
+      --accent: #22d3ee;
+      --accent-soft: rgba(34, 211, 238, 0.18);
+      --accent-strong: #38bdf8;
+      --danger: #fb7185;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.9);
+      --glow-soft: 0 0 32px rgba(34, 211, 238, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      padding: 14px 20px 18px;
+      border-radius: var(--radius-xl);      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.16) 0, transparent 55%),
+        linear-gradient(to bottom right, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: var(--shadow-soft), var(--glow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 10% -10%, rgba(56, 189, 248, 0.12), transparent 55%),
+        radial-gradient(circle at 90% 120%, rgba(129, 140, 248, 0.18), transparent 55%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .headline-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 760px;
+    }
+
+    h1 {      margin: 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .holo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #a5f3fc 0, #22d3ee 40%, #0369a1 100%);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.9);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px 4px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #a5f3fc;
+    }
+
+    .badge-pip {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22d3ee;
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text-soft);
+    }
+    .subtitle strong { color: #e5e7eb; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .panel {
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), #020617);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)),
+        radial-gradient(circle at top, rgba(15, 23, 42, 0.65), transparent 65%);
+      opacity: 0.92;
+      pointer-events: none;
+    }
+
+    .panel-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+      margin: 0 0 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .panel-title span:last-child {
+      font-size: 0.7rem;
+      text-transform: none;
+      opacity: 0.75;
+    }
+
+    .venue-list-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .venue-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: 12px 12px 11px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.85), #020617);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      cursor: pointer;
+      transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        transform 0.1s ease,
+        box-shadow 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .venue-card:hover {
+      border-color: rgba(56, 189, 248, 0.7);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.22);
+      transform: translateY(-1px);
+    }
+
+    .venue-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 26px rgba(34, 211, 238, 0.55);
+      background:
+        radial-gradient(circle at 0% -30%, rgba(8, 47, 73, 0.9), transparent 55%),
+        radial-gradient(circle at 110% 130%, rgba(15, 23, 42, 0.94), #020617);
+    }
+
+    .venue-mainline {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .venue-name {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .venue-location {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .venue-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      color: #cbd5f5;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+
+    .pill-accent {
+      border-color: rgba(56, 189, 248, 0.8);
+      color: #e0f2fe;
+      background: rgba(15, 23, 42, 0.92);
+    }
+
+    .detail-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+      gap: 12px 16px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 880px) {
+      .detail-header {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .detail-heading-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #detailName {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    #detailLocation {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-soft);
+    }
+
+    .detail-tagline {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #cbd5f5;
+      max-width: 640px;
+    }
+
+    .detail-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .detail-hero {
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      min-height: 180px;
+    }
+
+    /* Carousel */
+    .carousel-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+
+    .carousel-frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.8s ease-in-out;
+    }
+
+    .carousel-frame img.active {
+      opacity: 1;
+    }
+
+    .metrics-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .metrics-title {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+    }
+
+    .criteria-toggle {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #cbd5f5;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .criteria-toggle span:first-child {
+      font-size: 0.85rem;
+    }
+
+    .criteria-toggle:hover {
+      background: rgba(8, 47, 73, 0.9);
+      border-color: rgba(56, 189, 248, 0.8);
+    }
+
+    .criteria-panel {
+      margin-top: 6px;
+      padding: 8px 10px 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: rgba(15, 23, 42, 0.96);
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      display: none;
+    }
+
+    .criteria-panel.active { display: block; }
+
+    .criteria-panel strong { color: #e5e7eb; }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 6px 14px;
+      margin-top: 4px;
+    }
+
+    .criteria-item { line-height: 1.4; }
+
+    .criteria-item span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      display: block;
+      color: #cbd5f5;
+      margin-bottom: 1px;
+    }
+
+    .alignment-block {
+      margin-top: 6px;
+      padding: 10px 10px 8px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), #020617);
+      border: 1px solid rgba(55, 65, 81, 0.8);
+    }
+
+    .alignment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px 14px;
+    }
+
+    .alignment-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .alignment-label {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      min-height: 32px;
+      align-items: flex-end;
+    }
+
+    .alignment-label span:last-child {
+      font-size: 0.75rem;
+      text-transform: none;
+      letter-spacing: 0.02em;
+    }
+
+    .alignment-bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(30, 64, 175, 0.6);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .alignment-fill {
+      position: absolute;
+      inset: 0;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+      transition: width 0.32s ease;
+    }
+
+    .alignment-fill.low {
+      background: linear-gradient(90deg, rgba(148, 163, 184, 0.8), rgba(148, 163, 184, 0.9));
+      box-shadow: none;
+    }
+
+    .alignment-fill.caution {
+      background: linear-gradient(90deg, rgba(248, 113, 113, 0.95), rgba(248, 113, 113, 0.85));
+      box-shadow: 0 0 10px rgba(248, 113, 113, 0.7);
+    }
+
+    .detail-section {
+      padding: 10px 10px 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      background: rgba(15, 23, 42, 0.86);
+    }
+
+    .detail-section h3 {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #cbd5f5;
+    }
+
+    .detail-section p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+
+    .detail-section ul {
+      margin: 4px 0 2px;
+      padding-left: 18px;
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+
+    .detail-section li + li { margin-top: 2px; }
+
+    .dual-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px 18px;
+    }
+
+    .detail-section strong { color: #e5e7eb; }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .link-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      color: #e0f2fe;
+      text-decoration: none;
+      transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+    }
+
+    .link-chip span:first-child { font-size: 1rem; }
+
+    .link-chip:hover {
+      background: rgba(8, 47, 73, 0.9);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+      transform: translateY(-0.5px);
+    }
+
+    .map-section {
+      padding: 10px 10px 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(30, 64, 175, 0.8);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), #020617);
+    }
+
+    .map-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .map-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #cbd5f5;
+    }
+
+    .map-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .mini-map-wrapper {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: radial-gradient(circle at top, #020617, #000);
+    }
+
+    .mini-map-cta {
+      width: 100%;
+      border: none;
+      background:
+        radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), #020617);
+      padding: 10px 12px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      cursor: pointer;
+      text-align: left;
+      color: #e5e7eb;
+      box-shadow: inset 0 0 0 1px rgba(51, 65, 85, 0.9);
+      transition:
+        box-shadow 0.18s ease,
+        transform 0.1s ease,
+        background 0.2s ease;
+    }
+
+    .mini-map-cta:hover {
+      box-shadow:
+        inset 0 0 0 1px rgba(56, 189, 248, 0.9),
+        0 0 18px rgba(56, 189, 248, 0.45);
+      transform: translateY(-1px);
+      background:
+        radial-gradient(circle at top left, rgba(8, 47, 73, 0.96), #020617);
+    }
+
+    .mini-map-mainline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .mini-map-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: radial-gradient(circle, #22d3ee, #0ea5e9);
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.9);
+      color: #020617;
+    }
+
+    .mini-map-subline {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+
+    .mini-map-hint {
+      font-size: 0.75rem;
+      color: rgba(148, 163, 184, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .map-caption {
+      margin-top: 5px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    footer {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: rgba(148, 163, 184, 0.75);
+      text-align: right;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 600px) {
+      header { padding-inline: 16px; }
+      .panel { padding-inline: 11px; }
+
+      /* Audio Player & Visualizer - Mobile Adjustments */
+      .audio-channel-zone {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: none;
+        align-items: center;
+        width: 100%;
+      }
+      #audioViz {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+
+    /* Audio Player & Visualizer - Global Styles */
+    .audio-channel-zone {
+      /* Compact layout for top-right header position */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }    .audio-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+    }
+
+    #audioViz {
+      width: 320px;
+      height: 40px;
+      background: rgba(15, 23, 42, 0.3);
+      border-radius: 8px;
+    }
+    .audio-progress {
+      width: 100%;
+      max-width: 320px;
+      height: 4px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: -4px; /* Visual grouping with canvas */
+      margin-bottom: 4px;
+    }
+
+    .audio-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 8px var(--accent);
+    }
+    .btn-audio {
+      appearance: none;
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      color: var(--accent);
+      padding: 8px 18px 8px 14px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.1);
+    }
+
+    .btn-audio:hover {
+      background: rgba(34, 211, 238, 0.1);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-audio.playing {
+      background: rgba(34, 211, 238, 0.15);
+      border-color: #e5e7eb;
+      color: #e5e7eb;
+      box-shadow: 0 0 12px rgba(229, 231, 235, 0.2);
+    }
+
+    .btn-venue-audio {
+      margin-top: 12px;
+      align-self: flex-start;
+      border-color: rgba(148, 163, 184, 0.5);
+      color: #cbd5f5;
+    }
+
+    .btn-venue-audio:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Podcast Specific Styles */    .podcast-only { display: none !important; }
+    .mode-podcast .podcast-only { display: block !important; }
+    .mode-podcast .venue-only { display: none !important; }
+
+    /* The Hero/Thumbnail on the right */
+    .podcast-hero-frame {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #1e293b, #020617);
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+    }
+
+    /* Force square aspect ratio for the right column in podcast mode */
+    .mode-podcast .detail-hero {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-width: 400px; /* Prevent it from getting massive */
+      margin-left: auto; /* Align right if space permits */
+    }
+    
+    .mode-podcast .detail-header {
+      /* Ensure grid respects the content heights */
+      align-items: start;
+    }    .podcast-hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+    }
+
+    /* The Player Controls on the left (replacing text content) */
+    .podcast-player-zone {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 20px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), #020617);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(34, 211, 238, 0.05);
+    }
+
+    .pp-main-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .pp-play-btn {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #0ea5e9);
+      border: none;
+      color: #020617;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pp-play-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 35px rgba(34, 211, 238, 0.6);
+    }
+
+    .pp-info-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .pp-mini-viz {
+      width: 120px;
+      height: 40px;
+      margin-left: auto; /* Push to right */
+      opacity: 0.8;
+    }
+    .pp-status {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .pp-time-display {
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #e5e7eb;
+    }
+    .pp-download-btn {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s;
+      margin-top: 2px;
+    }
+    .pp-download-btn:hover {
+      color: var(--accent);
+    }
+    /* Seek Slider */
+    .pp-seek-container {
+      width: 100%;
+      padding: 0 4px;
+    }
+
+    .pp-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      background: rgba(148, 163, 184, 0.15);
+      border-radius: 999px;
+      outline: none;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .pp-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.9);
+      cursor: pointer;
+      transition: transform 0.1s;
+      margin-top: -5px; /* Alignment fix */
+    }
+
+    /* Firefox specific */
+    .pp-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.9);
+      cursor: pointer;
+      border: none;
+    }
+    /* Track styling for Chrome to align thumb */
+    .pp-slider::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="headline-row">
+        <div class="title-block">
+          <h1>
+            <span class="holo-dot"></span>
+            Florida Naturist Venue Console
+          </h1>
+          <p class="subtitle">
+            This console pulls together high-level intel on three Florida naturist venues
+            that can support <strong>naked embodiment, breathwork, and energy work</strong>
+            without digging through a dozen browser tabs. Tap a venue, scan the scores,
+            and feel into where this style of work would land most naturally.
+          </p>
+        </div>
+        
+        <!-- Moved Audio Player to Top Right -->
+        <div class="audio-channel-zone">
+          <div class="audio-label">T.O.N.I. Voice Channel</div>
+          <canvas id="audioViz" width="320" height="40"></canvas>
+          <div class="audio-progress">
+            <div class="audio-progress-fill" id="audioProgressFill"></div>
+          </div>
+          <button type="button" id="introBtn" class="btn-audio">
+            <span class="icon">▶</span>
+            <span class="text">Play T.O.N.I. Intro</span>
+          </button>
+        </div>
+      </div>
+    </header>      <!-- LEFT: VENUE LIST -->
+    <main class="layout">      <section class="panel" aria-label="Florida naturist venues">
+        <div class="panel-inner">
+          <div class="panel-title">
+            <span>Venues · Florida Naturist Triangle</span>
+            <span>Select a card to switch focus</span>
+          </div>
+          <div class="venue-list-grid">
+            <article class="venue-card active" data-venue-id="cypress" tabindex="0">
+              <div class="venue-mainline">
+                <div>
+                  <div class="venue-name">Cypress Cove Nudist Resort</div>
+                  <div class="venue-location">Kissimmee · Greater Orlando</div>
+                </div>
+              </div>
+              <div class="venue-tags">
+                <span class="pill pill-accent">Full-service resort</span>
+                <span class="pill">Family naturist</span>
+                <span class="pill">Strong for fly-ins</span>
+              </div>
+            </article>
+
+            <article class="venue-card" data-venue-id="sunsport" tabindex="0">
+              <div class="venue-mainline">
+                <div>
+                  <div class="venue-name">Sunsport Gardens</div>
+                  <div class="venue-location">Loxahatchee · West Palm area</div>
+                </div>
+              </div>
+              <div class="venue-tags">
+                <span class="pill pill-accent">Workshop festival hub</span>
+                <span class="pill">Rustic &amp; earthy</span>
+                <span class="pill">Community-driven</span>
+              </div>
+            </article>
+
+            <article class="venue-card" data-venue-id="lakecomo" tabindex="0">
+              <div class="venue-mainline">
+                <div>
+                  <div class="venue-name">Lake Como Family Nudist Resort</div>
+                  <div class="venue-location">Lutz · Tampa Bay region</div>
+                </div>
+              </div>
+              <div class="venue-tags">
+                <span class="pill pill-accent">Nature preserve</span>
+                <span class="pill">Lakeside campus</span>
+                <span class="pill">Established community</span>
+              </div>
+            </article>
+            <article class="venue-card" data-venue-id="podcast" tabindex="0">
+              <div class="venue-mainline">
+                <div>
+                  <div class="venue-name">Podcast: Dojo Deep Dive</div>
+                  <div class="venue-location">Max &amp; Vera</div>
+                </div>
+              </div>
+              <div class="venue-tags">
+                <span class="pill pill-accent">Audio Content</span>
+              </div>
+            </article>        </div>
+      </section>
+
+      <!-- RIGHT: DETAIL PANEL -->
+      <section class="panel" aria-live="polite">
+        <div class="panel-inner detail-shell">
+          <div class="detail-header">
+            <div class="detail-heading-block">
+              <h2 id="detailName">Cypress Cove Nudist Resort</h2>
+              <p id="detailLocation">Kissimmee, FL · Near Orlando</p>
+              <p class="detail-tagline" id="detailHeadline">
+                Polished lakeside nudist resort with serious infrastructure and a
+                full events calendar — the most "resort" of the three options.
+              </p>
+              <div class="detail-tags-row" id="detailTagsRow"></div>
+              
+              <!-- VENUE AUDIO BUTTON (Visible in both modes now) -->
+              <button type="button" id="venueAudioBtn" class="btn-audio btn-venue-audio" style="margin-bottom: 12px;">
+                <span class="icon">▶</span>
+                <span class="text">Hear T.O.N.I. Summary</span>
+              </button>
+
+              <!-- PODCAST PLAYER (Hidden in venue mode via podcast-only) -->
+              <div class="podcast-only podcast-player-zone">
+                <div class="pp-main-row">
+                  <button type="button" id="ppPlayBtn" class="pp-play-btn">▶</button>
+                  <div class="pp-info-col">
+                    <div class="pp-status" id="ppStatus">Ready to Play</div>
+                    <div class="pp-time-display">
+                      <span id="ppCurrent">00:00</span> / <span id="ppDuration">00:00</span>
+                    </div>
+                  </div>
+                  <a id="ppDownload" class="pp-download-btn" href="https://t9006115996.p.clickup-attachments.com/t9006115996/60ce8f9f-fbee-47ac-903b-bed6c59e3c6b/ddd_jpk_florida-naked-venues.mp3" target="_blank">
+                    <span>↓</span> Download MP3
+                  </a>                  <canvas id="podViz" width="120" height="40" class="pp-mini-viz"></canvas>
+                </div>
+                <div class="pp-seek-container">
+                  <input type="range" id="ppSlider" class="pp-slider" min="0" max="100" value="0">
+                </div>
+              </div>
+            </div>
+            
+            <!-- RIGHT COLUMN: Images / Thumbnail -->            <div class="detail-hero">
+              <div id="detailCarousel" class="carousel-frame"></div>
+            </div>
+          </div>
+          <!-- Podcast Info Section (Full Width) -->
+          <section class="detail-section podcast-only" style="margin-top: 16px;">
+            <h3>About the Deep Dive</h3>
+            <p>
+              Think of this as a custom podcast episode built just for you. Same intel you’re seeing on the screen, but broken down conversationally with nuance, banter, and storytelling.
+            </p>
+            <ul style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+              <li>
+                <strong>Max</strong> is a retired firefighter and recovering people-pleasing nice guy who relates everything back to his D&D bard, Hootin’ Harry. He says what everyone is thinking with a mischievous grin.
+              </li>
+              <li>
+                <strong>Vera</strong> is an IFS therapist and mystic who manages her own nervous system while bringing clinical nuance to the "soul language" of the work.
+              </li>
+            </ul>
+            <p style="margin-top: 12px;">
+              Together they walk through Cypress, Sunsport, and Lake Como to help you feel, not just think, where you want to stand naked and do this work.
+            </p>
+          </section>          <section class="map-section venue-only">            <div class="map-header-row">
+              <div>
+                <div class="map-title">Map · Distance from West Palm Beach</div>
+                <div class="map-subtitle">
+                  Click below to open the venue’s Google Maps page. Estimated drive time is still referenced here for context.
+                </div>
+              </div>
+            </div>
+            <div class="mini-map-wrapper">
+              <button type="button" class="mini-map-cta" id="mapButton">
+                <div class="mini-map-mainline">
+                  <span class="mini-map-icon">📍</span>
+                  <span id="mapButtonLabel">Open Cypress Cove on Google Maps</span>
+                </div>
+                <div class="mini-map-subline" id="mapDistance">
+                  Approx drive from West Palm Beach: ~2.5 hours (around 140–150 miles).
+                </div>
+                <div class="mini-map-hint">Click to open the map in a new tab.</div>
+              </button>
+            </div>
+            <div class="map-caption" id="mapCaption">
+              Opens the venue’s Google Maps place page; distance estimates use West Palm Beach, FL as a reference point.
+            </div>
+          </section>
+
+          <section class="detail-section venue-only">
+            <div class="metrics-header-row">              <div class="metrics-title">Fit scores · container types &amp; value</div>
+              <button type="button" class="criteria-toggle" id="criteriaToggle">
+                <span>?</span>
+                <span>Criteria key</span>
+              </button>
+            </div>
+            <div class="criteria-panel" id="criteriaPanel">
+              <div class="criteria-grid">
+                <div class="criteria-item">
+                  <span class="label">Workshops</span>
+                  <span>
+                    Short, focused offerings (roughly 2–3 hours) where people can
+                    <strong>show up, practice, and leave</strong>. Little to no on-site
+                    homework. Venue just needs a clean practice space and simple
+                    logistics.
+                  </span>
+                </div>
+                <div class="criteria-item">
+                  <span class="label">Intensives</span>
+                  <span>
+                    1–2 day containers (often a weekend) with
+                    <strong>daily group sessions</strong> and personal integration
+                    homework. Venue needs reliable meeting space, quiet-enough
+                    environment, and decent options for people to stay on or nearby.
+                  </span>
+                </div>
+                <div class="criteria-item">
+                  <span class="label">Immersions</span>
+                  <span>
+                    3–4+ day retreats with structured events each day, men typically
+                    <strong>staying on-property</strong> with meals handled. Venue ideally
+                    works as a self-contained ecosystem for practice, rest, and
+                    community.
+                  </span>
+                </div>
+                <div class="criteria-item">
+                  <span class="label">Self-pleasure compatibility</span>
+                  <span>
+                    How likely the venue is to be comfortable with
+                    <strong>guided erotic energy / self-pleasure work</strong> framed as
+                    therapeutic and intentional, while still respecting naturist
+                    boundaries around public sexual behavior.
+                  </span>
+                </div>
+                <div class="criteria-item">
+                  <span class="label">Nature vibes</span>
+                  <span>
+                    How deeply the venue drops people into
+                    <strong>nature, quiet, and elemental contact</strong> (trees, lake,
+                    barefoot earth, relative distance from nightlife / city buzz)
+                    versus feeling like a standard hotel with nudity.
+                  </span>
+                </div>
+                <div class="criteria-item">
+                  <span class="label">Value / ROI potential</span>
+                  <span>
+                    A synthesis of <strong>venue costs vs. likely revenue</strong> for
+                    ~10–15 men at your normal pricing ranges: workshops ($200–400),
+                    intensives ($500–800), immersions ($1,200–1,800). Higher score
+                    means the venue is easier to keep <strong>accessible</strong> while
+                    still making a healthy return.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="alignment-block" aria-label="Fit scores for this style of work">
+              <div class="alignment-grid">
+                <div class="alignment-row">
+                  <div class="alignment-label">
+                    <span>Workshops</span>
+                    <span id="scoreWorkshopsLabel">Strong fit</span>
+                  </div>
+                  <div class="alignment-bar">
+                    <div class="alignment-fill" id="scoreWorkshopsFill"></div>
+                  </div>
+                </div>
+                <div class="alignment-row">
+                  <div class="alignment-label">
+                    <span>Intensives</span>
+                    <span id="scoreIntensivesLabel">Strong fit</span>
+                  </div>
+                  <div class="alignment-bar">
+                    <div class="alignment-fill" id="scoreIntensivesFill"></div>
+                  </div>
+                </div>
+                <div class="alignment-row">
+                  <div class="alignment-label">
+                    <span>Immersions / retreats</span>
+                    <span id="scoreImmersionsLabel">Promising</span>
+                  </div>
+                  <div class="alignment-bar">
+                    <div class="alignment-fill" id="scoreImmersionsFill"></div>
+                  </div>
+                </div>
+                <div class="alignment-row">
+                  <div class="alignment-label">
+                    <span>Self-pleasure compatibility</span>
+                    <span id="scoreSelfLabel">Guarded</span>
+                  </div>
+                  <div class="alignment-bar">
+                    <div class="alignment-fill caution" id="scoreSelfFill"></div>
+                  </div>
+                </div>
+                <div class="alignment-row">
+                  <div class="alignment-label">
+                    <span>Nature vibes</span>
+                    <span id="scoreNatureLabel">Promising</span>
+                  </div>
+                  <div class="alignment-bar">
+                    <div class="alignment-fill" id="scoreNatureFill"></div>
+                  </div>
+                </div>
+                <div class="alignment-row">
+                  <div class="alignment-label">
+                    <span>Value / ROI potential</span>
+                    <span id="scoreValueLabel">Balanced</span>
+                  </div>
+                  <div class="alignment-bar">
+                    <div class="alignment-fill" id="scoreValueFill"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="detail-section venue-only">
+            <h3>At a glance</h3>            <ul id="detailAtAGlance"></ul>
+          </section>
+
+          <section class="detail-section venue-only">
+            <h3>Value proposition overview</h3>            <p id="detailValueProp"></p>
+          </section>
+
+          <section class="detail-section venue-only">
+            <h3>Best uses for this work</h3>            <ul id="detailBestFor"></ul>
+          </section>
+
+          <section class="detail-section venue-only">
+            <h3>Self-pleasure &amp; erotic energy fit</h3>            <p id="detailSelfPleasure"></p>
+          </section>
+
+          <section class="detail-section venue-only">
+            <div class="dual-cols">              <div>
+                <h3>Why it works</h3>
+                <ul id="detailPros"></ul>
+              </div>
+              <div>
+                <h3>Points of caution</h3>
+                <ul id="detailCons"></ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="detail-section venue-only">
+            <h3>Alignment notes</h3>            <ul id="detailAlignmentNotes"></ul>
+          </section>
+
+          <section class="detail-section venue-only">
+            <h3>Links &amp; navigation</h3>            <div class="link-row" id="detailLinks"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Internal Naked Dojo Codex view · T.O.N.I. reconnaissance on Florida naturist venues.
+    </footer>
+  </div>
+
+  <script>
+    const venues = [
+      {
+        id: "cypress",
+        voUrl: "https://t9006115996.p.clickup-attachments.com/t9006115996/3b0627ff-2081-4626-ac39-ffcb90c94c14/vo2.mp3",        name: "Cypress Cove Nudist Resort",
+        location: "Kissimmee, FL · Near Orlando",
+        tags: ["Full-service lakeside resort", "Family-friendly naturism", "Fly-in friendly"],
+        headline:
+          "Polished lakeside nudist resort with serious infrastructure and a packed events calendar.",
+        images: [
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/febed2b7-5e8a-4331-afc8-b60859e7c263/cypress1.jpg",
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/15b0f48f-3e0d-42d3-8968-63f3d0efcb8a/cypress2.jpg",
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/8991dba4-1328-471d-a58d-3c4aa8002b8e/cypress3.jpg"
+        ],
+        atAGlance: [
+          "300-acre family-friendly nudist resort built around a 50-acre lake with wetlands and nature areas.",
+          "Villa hotel rooms and apartments plus a modern RV park and campsites make on-property stays straightforward.",
+          "Two heated pools, hot tubs, gym, massage spa, lakeside restaurant, pool bar, game room, and sports courts backed by a full-time activities department.",
+          "Day-visit membership fees for non-members sit in the ~$35–40 range per person, with resort-style lodging rates for overnight stays."
+        ],
+        valuePropText:
+          "Cypress likely lands in the “polished but pricier” category. For a 10-man workshop, day-pass costs look manageable against a $200–400 ticket range, but once you shift into 2–4 night intensives or immersions using on-site villas, per-man lodging can push toward the upper end of what feels accessible. This venue shines when you want a premium retreat feel and can price accordingly, or when you’re primarily running day-work with locals who don’t all need rooms.",
+        bestFor: [
+          "Workshops: day-visit access and on-site rooms make 2–3 hour breathwork or cultivation sessions very feasible.",
+          "Intensives: on-site lodging and food service support 1–2 day intensives with daily group sessions plus homework.",
+          "Immersions: infrastructure can comfortably handle 3–4 day retreats if the erotic-energy component is clearly framed and approved in advance."
+        ],
+        selfPleasure:
+          "As a family-friendly naturist resort, public explicit sexual behavior is not allowed. Any guided self-pleasure work would almost certainly need to happen in private, closed-door sessions, framed clearly as therapeutic / educational and pre-approved with management.",
+        pros: [
+          "Most polished “resort feel” of the three — an easy yes for men who like comfort and clear amenities.",
+          "Strong amenities reduce logistics: lodging, food, social space, and recreation all on one campus.",
+          "Proximity to Orlando International Airport and major attractions makes travel simple for out-of-state attendees.",
+          "Group discounts on blocks of rooms can slightly soften the overall cost profile for multi-day containers."
+        ],
+        cons: [
+          "Family-oriented branding makes anything explicitly involving self-pleasure a more delicate negotiation.",
+          "Busy social calendar and theme weekends could compete for quiet, sacred-space time during peak dates.",
+          "Resort-style lodging rates can push ticket prices toward the top end of your preferred range for intensives and immersions."
+        ],
+        alignmentNotes: [
+          "Excellent for naked breathwork, meditation, yoga, tai chi, and non-sexual embodiment work in shared spaces.",
+          "Strong fit for workshops and intensives; immersions are logistically easy but require detailed conversations around erotic-energy content.",
+          "Self-pleasure pieces want to be framed as optional, private, therapeutically grounded work — never as general “entertainment”."
+        ],
+        urls: {
+          official: "https://www.cypresscoveresort.com/",
+          amenities: "https://www.cypresscoveresort.com/amenities/",
+          events: "https://www.cypresscoveresort.com/events/",
+           mapsPlace: "https://www.google.com/maps/search/?api=1&query=Cypress%20Cove%20Nudist%20Resort%20and%20Spa"
+		},
+		map: {
+		  url: "https://www.google.com/maps/search/?api=1&query=Cypress%20Cove%20Nudist%20Resort%20and%20Spa",
+          label: "Open Cypress Cove on Google Maps",
+          distance: "Approx drive from West Palm Beach: ~2.5 hours (around 140–150 miles).",
+          caption: "Opens Cypress Cove’s Google Maps place page; distance estimate uses West Palm Beach, FL as a reference."
+        },
+        alignmentScores: {
+          workshops: 5,
+          intensives: 4,
+          immersions: 4,
+          selfPleasure: 2,
+          nature: 3,
+          valueProp: 3   // balanced: good but more premium
+        }
+      },
+      {
+        id: "sunsport",
+        voUrl: "https://t9006115996.p.clickup-attachments.com/t9006115996/fb6b05a4-6016-4fe4-838e-a714100a4dc5/vo3.mp3",        name: "Sunsport Gardens Family Naturist Resort",
+        location: "Loxahatchee, FL · West Palm area",
+        tags: ["Workshop-heavy festival hub", "Rustic & nature-centric", "Community-driven"],
+        headline:
+          "Tropical, earthy naturist community known for its workshop-rich Mid-Winter Naturist Festival and conscious-hippy vibe.",
+        images: [
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/d12b8474-fafd-478b-8ca2-703ef7a1b270/sunsport1.jpg",
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/7170890f-0073-4ac8-8c2b-f09c237e38ae/sunsport2.jpg",
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/4d343952-be86-4589-a884-7e43fba24082/sunsport3.jpg"
+        ],
+        atAGlance: [
+          "Roughly 40-acre naturist resort with pool, hot tub, camping, and lush vegetation in a rural area west of West Palm Beach.",
+          "Home of the Mid-Winter Naturist Festival, which runs a wide range of workshops, circles, and activities across several days.",
+          "Culture skews toward conscious, alternative, and community-oriented — drum circles, ecstatic-style spaces, and nature connection.",
+          "Day passes tend to be in the mid-$30 range, with camping and simple lodging options that are generally described as “very reasonable.”"
+        ],
+        valuePropText:
+          "Sunsport likely offers the strongest value per man, especially for workshops and weekend intensives. A 10-man workshop built on day passes stays well under even your minimum ticket range, and rustic lodging / camping keeps overnight costs accessible for 2–3 day containers. This is a venue where you can price toward the middle of your preferred bands and still keep the experience within reach for men who can’t drop high-end retreat money — while maintaining healthy ROI.",
+        bestFor: [
+          "Workshops: already set up to host classes, circles, and practice sessions — 2–3 hour offerings plug in very naturally.",
+          "Intensives: weekend-length intensives with a mix of group practice, sharing circles, and solo homework fit the existing festival / retreat energy.",
+          "Immersions: possible but more rustic — great for smaller groups who like a camp-style, in-the-trees environment rather than hotel polish."
+        ],
+        selfPleasure:
+          "Rules emphasize no photography / video and no explicit sexual behavior in public spaces. The culture is, however, comfortable with body-positive and personal-growth work. Guided self-pleasure would likely need to be framed as closed, therapeutic workshops in private or semi-private spaces, with explicit consent from management.",
+        pros: [
+          "Energetically the closest match to naked energy-work, conscious sexuality, and community-based cultivation.",
+          "Existing reputation for festivals and workshops makes structured offerings feel like a natural extension.",
+          "Rustic, nature-centric environment supports shadow work, breathwork, and somatic release without feeling like a theme-park hotel.",
+          "Best value profile of the three — day passes and simple lodging make ticket pricing far more flexible."
+        ],
+        cons: [
+          "More rustic and “campy” than resort-lux — can be a harder sell for men who need high comfort.",
+          "Shared spaces and ongoing community life mean less control over acoustics and ambiance compared to a fully private venue.",
+          "Self-pleasure content still has to live inside clear naturist boundaries; anything too explicit in shared public areas will be off-limits."
+        ],
+        alignmentNotes: [
+          "Excellent playground for day-workshops and weekend intensives focused on embodiment, breath, shadow, and energy.",
+          "Culturally the best alignment for naked therapy and self-acceptance work, as long as container agreements respect naturist rules.",
+          "A strong candidate for recurring festival-style offerings or collaborations once trust with the community is built."
+        ],
+        urls: {
+          unofficialMain: "https://www.tripadvisor.com/Hotel_Review-g34404-d3490608-Reviews-Sunsport_Gardens_Family_Naturist_Resort-Loxahatchee_Florida.html",
+          socials: "https://www.instagram.com/sunsportgardens/",
+          festivalCall: "https://www.facebook.com/sunsport.gardens.resort/",
+          mapsPlace: "https://www.google.com/maps/search/?api=1&query=Sunsport%20Gardens%20Family%20Naturist%20Resort"
+		},
+		map: {
+		  url: "https://www.google.com/maps/search/?api=1&query=Sunsport%20Gardens%20Family%20Naturist%20Resort",
+          label: "Open Sunsport Gardens on Google Maps",
+          distance: "Approx drive from West Palm Beach: ~40 minutes (around 30 miles).",
+          caption: "Opens Sunsport Gardens’ Google Maps place page; distance estimate uses West Palm Beach, FL as a reference."
+        },
+        alignmentScores: {
+          workshops: 5,
+          intensives: 4,
+          immersions: 3,
+          selfPleasure: 3,
+          nature: 4,
+          valueProp: 5   // excellent value / accessibility
+        }
+      },
+      {
+        id: "lakecomo",
+        voUrl: "https://t9006115996.p.clickup-attachments.com/t9006115996/040f8a75-4a32-4d3d-8907-d284a41905f2/vo4.mp3",        name: "Lake Como Family Nudist Resort",
+        location: "Lutz, FL · Tampa Bay region",
+        tags: ["Lakeside nature preserve", "Established nudist hub", "Sports & recreation"],
+        headline:
+          "Large, established naturist resort wrapped around a private lake and nature preserve just north of Tampa.",
+        images: [
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/6242779d-6bc8-4c69-b8fa-94a910b04c8a/lake1.jpg",
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/5ba1e53e-c74c-4ca9-a577-43b712c6b80f/lake2.jpg",
+          "https://t9006115996.p.clickup-attachments.com/t9006115996/8026a65e-d70f-4b85-9167-3c5501f3b893/lake3.jpg"
+        ],
+        atAGlance: [
+          "Roughly 200-acre grounds including a private lake and over 100 acres of nature preserve with hiking trails.",
+          "Mix of rental cabins, motel rooms, RV and tent sites, plus on-site restaurant and lakeside bar.",
+          "Pool, hot tub, sauna, tennis and other sports, plus regular naturist social events — a long-standing community hub in the Tampa area.",
+          "Recent traveler reports put basic accommodations in the ~$100–120 per-night range, with day visits and tent camping available for lower cost."
+        ],
+        valuePropText:
+          "Lake Como trends toward a middle path on value. Simple camping or shared-room setups make weekend intensives very workable for 10–15 men at your usual investment ranges, while private cabins and longer stays for immersions begin to nudge ticket prices higher. Overall, it sits in a sweet spot where you can offer a strong nature-retreat feel at fair pricing, especially if you steer men toward the simpler lodging options.",
+        bestFor: [
+          "Workshops: day-visit or overnight guests can easily attend 2–3 hour group sessions around pool-adjacent or indoor spaces.",
+          "Intensives: weekend containers with structured group time and solo homework are very feasible given lodging and food on site.",
+          "Immersions: the size of the property and nature preserve make 3–4 day retreats attractive, especially for men who like outdoor time and lake access."
+        ],
+        selfPleasure:
+          "Marketed clearly as a family nudist resort, with a strong emphasis on non-sexualized social nudity. Guided self-pleasure work would need to be kept out of public view, positioned as optional, and run in private spaces with explicit, written buy-in from management.",
+        pros: [
+          "Beautiful natural setting with lake and preserve — great for nervous systems, embodiment, and “off-grid but still accessible” retreat energy.",
+          "Tampa-area location offers another major-airport access point, giving geographic diversity beyond Orlando and West Palm.",
+          "Long-running community means existing systems for events, accommodations, and on-site food / drink.",
+          "Cabin and room rates appear mid-range, allowing for solid value if men are open to sharing spaces or using simpler lodging."
+        ],
+        cons: [
+          "Family-nudist branding and local culture may be conservative around anything labeled “sexual” or “self-pleasure,” even in a therapeutic context.",
+          "Social energy can skew casual-vacation; strong container agreements help maintain depth for shadow work and transmutation practices.",
+          "Less explicitly workshop-coded than Sunsport, so there may be more education required when pitching structured offerings."
+        ],
+        alignmentNotes: [
+          "Strong fit for naked embodiment, breathwork, and nature-centric men’s work in circles and movement sessions.",
+          "Good platform for intensives and medium-length immersions focused on integration, nervous-system work, and creative cultivation.",
+          "Any erotic-energy components should be clearly bounded to private, closed groups with transparent expectations to preserve trust with the resort."
+        ],
+        urls: {
+          unofficialMain: "https://www.tripadvisor.com/Hotel_Review-g34407-d4022932-Reviews-Lake_Como_Family_Nudist_Resort-Lutz_Florida.html",
+          generalInfo: "https://campgrounds.rvlife.com/regions/florida/lutz/lake-como-family-nudist-resort-265112",
+          musicBar: "https://gotonight.com/venues/venue/?id=12466",
+		  mapsPlace: "https://www.google.com/maps/search/?api=1&query=Lake%20Como%20Family%20Nudist%20Resort"
+		},
+		map: {
+		  url: "https://www.google.com/maps/search/?api=1&query=Lake%20Como%20Family%20Nudist%20Resort",
+          label: "Open Lake Como on Google Maps",
+          distance: "Approx drive from West Palm Beach: ~3.5 hours (just over 200 miles).",
+          caption: "Opens Lake Como’s Google Maps place page; distance estimate uses West Palm Beach, FL as a reference."
+        },
+        alignmentScores: {
+          workshops: 4,
+          intensives: 4,
+          immersions: 4,
+          selfPleasure: 2,
+          nature: 5,
+          valueProp: 4   // favorable mid-range
+        }
+      }
+      ,
+      {
+        id: "podcast",
+        type: "podcast",
+        voUrl: "https://t9006115996.p.clickup-attachments.com/t9006115996/d33f048e-25a3-493f-9756-306e3d1a2077/vo5.mp3",
+        podcastUrl: "https://t9006115996.p.clickup-attachments.com/t9006115996/60ce8f9f-fbee-47ac-903b-bed6c59e3c6b/ddd_jpk_florida-naked-venues.mp3",
+        name: "Podcast: Dojo Deep Dive",
+        location: "With Max and Vera",        tags: ["Audio Content"],
+        headline: "Your personal commentary squad: Max and Vera break down the venues conversationally.",
+        images: [          "https://t9006115996.p.clickup-attachments.com/t9006115996/a1226aa6-b604-4ca6-8314-705585400f3e/mp3%20thumbnail.jpg"
+        ],
+        // Standard venue fields empty as they are hidden in podcast mode
+        atAGlance: [], bestFor: [], pros: [], cons: [], alignmentNotes: [],
+        urls: {}
+      }    ];
+
+    const state = {
+      activeId: "cypress",
+      carouselIndex: 0,
+      carouselTimer: null
+    };
+
+    const els = {
+      cards: document.querySelectorAll(".venue-card"),
+      name: document.getElementById("detailName"),
+      location: document.getElementById("detailLocation"),
+      headline: document.getElementById("detailHeadline"),
+      tagsRow: document.getElementById("detailTagsRow"),
+      atAGlance: document.getElementById("detailAtAGlance"),
+      bestFor: document.getElementById("detailBestFor"),
+      valuePropText: document.getElementById("detailValueProp"),
+      selfPleasure: document.getElementById("detailSelfPleasure"),
+      pros: document.getElementById("detailPros"),
+      cons: document.getElementById("detailCons"),
+      alignmentNotes: document.getElementById("detailAlignmentNotes"),
+      links: document.getElementById("detailLinks"),
+      carousel: document.getElementById("detailCarousel"),
+      mapButton: document.getElementById("mapButton"),
+      mapButtonLabel: document.getElementById("mapButtonLabel"),
+      mapDistance: document.getElementById("mapDistance"),
+      mapCaption: document.getElementById("mapCaption"),
+      criteriaToggle: document.getElementById("criteriaToggle"),
+      criteriaPanel: document.getElementById("criteriaPanel"),
+      score: {
+        workshopsFill: document.getElementById("scoreWorkshopsFill"),
+        workshopsLabel: document.getElementById("scoreWorkshopsLabel"),
+        intensivesFill: document.getElementById("scoreIntensivesFill"),
+        intensivesLabel: document.getElementById("scoreIntensivesLabel"),
+        immersionsFill: document.getElementById("scoreImmersionsFill"),
+        immersionsLabel: document.getElementById("scoreImmersionsLabel"),
+        selfFill: document.getElementById("scoreSelfFill"),
+        selfLabel: document.getElementById("scoreSelfLabel"),
+        natureFill: document.getElementById("scoreNatureFill"),
+        natureLabel: document.getElementById("scoreNatureLabel"),
+        valueFill: document.getElementById("scoreValueFill"),
+        valueLabel: document.getElementById("scoreValueLabel")
+      },
+      podcast: {
+        playBtn: document.getElementById("ppPlayBtn"),
+        slider: document.getElementById("ppSlider"),
+        current: document.getElementById("ppCurrent"),
+        duration: document.getElementById("ppDuration"),
+        status: document.getElementById("ppStatus"),
+        viz: document.getElementById("podViz")
+      },      audio: {
+        download: document.getElementById("ppDownload"),        introBtn: document.getElementById("introBtn"),        venueBtn: document.getElementById("venueAudioBtn"),
+        vizCanvas: document.getElementById("audioViz"),
+        progressFill: document.getElementById("audioProgressFill")
+      }
+    };
+
+    /* --- AUDIO ENGINE START --- */
+    const introUrl = "https://t9006115996.p.clickup-attachments.com/t9006115996/c3c57630-9029-48b4-94c6-8e997f019ba5/vo1.mp3";
+    
+    // Using standard audio element to bypass CORS issues on hosted files
+    let audioEl = new Audio();
+    let isPlaying = false;
+    // Podcast Audio Element
+    let podAudioEl = new Audio();
+    let isPodPlaying = false;    let currentUrl = null;
+    let podAnimationId = null;    let animationId = null;
+
+    // Simulated "Chaotic" visualizer for voice aesthetic
+    function drawVisualizer() {
+      if (!els.audio.vizCanvas) return;
+      const canvas = els.audio.vizCanvas;
+      const ctx = canvas.getContext("2d");
+      const bufferLength = 20;
+      
+      const draw = () => {
+        if (!isPlaying) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            return;
+        }
+        animationId = requestAnimationFrame(draw);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const barWidth = 12;
+        const gap = 4;
+        let x = 0;
+        
+        for (let i = 0; i < bufferLength; i++) {
+          // Revised Algorithm: Smooth Organic Motion
+          // Replaced frame-by-frame random noise with interfering sine waves.
+          // This creates high variance but smooth motion (no flickering).
+          
+          // 1. Slow down the base time factor (approx 4x slower than before)
+          const time = Date.now() / 480; 
+          
+          // 2. Primary slow wave
+          const wave1 = Math.sin((i * 0.4) + time);
+          
+          // 3. Secondary faster wave to create organic peaks/valleys
+          const wave2 = Math.cos((i * 0.9) - (time * 2.5));
+          
+          // 4. Normalize and scale (ranges roughly 0.1 to 0.9)
+          let value = 0.5 + ((wave1 + wave2) * 0.35);
+          value = Math.max(0.1, Math.min(1.0, value));
+
+          const barHeight = value * (canvas.height - 4);
+          
+          // Gradient
+          const grad = ctx.createLinearGradient(0, canvas.height, 0, 0);
+          grad.addColorStop(0, "rgba(34, 211, 238, 0.2)");
+          grad.addColorStop(1, "rgba(34, 211, 238, 0.95)");
+
+          ctx.fillStyle = grad;
+          ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+          
+          x += barWidth + gap;
+        }
+      };
+      draw();
+    }
+
+    function stopAudio() {
+      audioEl.pause();
+      audioEl.currentTime = 0;
+      isPlaying = false;
+      currentUrl = null;
+      if (animationId) cancelAnimationFrame(animationId);
+      
+      // Reset visualizer & progress
+      const canvas = els.audio.vizCanvas;
+      if(canvas) {
+          const ctx = canvas.getContext("2d");
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      if (els.audio.progressFill) {
+        els.audio.progressFill.style.width = "0%";
+      }
+
+      updateAudioUI();
+    }
+    function stopPodcast() {
+      podAudioEl.pause();
+      isPodPlaying = false;
+      if (podAnimationId) cancelAnimationFrame(podAnimationId);
+      
+      // Clear pod viz
+      if(els.podcast.viz) {
+        const ctx = els.podcast.viz.getContext("2d");
+        ctx.clearRect(0, 0, els.podcast.viz.width, els.podcast.viz.height);
+      }
+      
+      updatePodcastUI();
+    }    function playAudio(url) {
+      // Mutual exclusion: Stop Podcast if playing
+      if (isPodPlaying) stopPodcast();
+
+      if (currentUrl === url && isPlaying) {
+        stopAudio();
+        return;
+      }
+      
+      if (isPlaying) {
+        stopAudio();
+      }
+
+      currentUrl = url;
+      audioEl.src = url;
+      
+      audioEl.play().then(() => {
+        isPlaying = true;
+        updateAudioUI();
+        drawVisualizer();
+      }).catch(err => {
+        console.error("Audio playback failed:", err);
+        stopAudio();
+      });
+    }
+    function updateAudioUI() {
+      const iBtn = els.audio.introBtn;
+      const iIcon = iBtn.querySelector(".icon");
+      const iText = iBtn.querySelector(".text");
+      
+      if (currentUrl === introUrl && isPlaying) {
+        iBtn.classList.add("playing");
+        iIcon.textContent = "■";
+        iText.textContent = "Stop T.O.N.I. Intro";
+      } else {
+        iBtn.classList.remove("playing");
+        iIcon.textContent = "▶";
+        iText.textContent = "Play T.O.N.I. Intro";
+      }
+
+      const vBtn = els.audio.venueBtn;
+      if (vBtn) {
+        const vIcon = vBtn.querySelector(".icon");
+        const vText = vBtn.querySelector(".text");
+        const activeVenue = venues.find(v => v.id === state.activeId);
+        
+        if (activeVenue && currentUrl === activeVenue.voUrl && isPlaying) {
+          vBtn.classList.add("playing");
+          vIcon.textContent = "■";
+          vText.textContent = "Stop T.O.N.I. Summary";
+        } else {
+          vBtn.classList.remove("playing");
+          vIcon.textContent = "▶";
+          vText.textContent = "Hear T.O.N.I. Summary";
+        }
+      }
+    }
+    /* --- PODCAST ENGINE --- */
+    function formatTime(sec) {
+      if (!sec || isNaN(sec)) return "00:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function drawPodVisualizer() {
+      if (!els.podcast.viz) return;
+      const canvas = els.podcast.viz;
+      const ctx = canvas.getContext("2d");
+      
+      // Fix internal resolution
+      canvas.width = canvas.clientWidth || 120;
+      canvas.height = canvas.clientHeight || 40;
+
+      const bufferLength = 12; // Fewer bars for mini viz
+      
+      const draw = () => {
+        if (!isPodPlaying) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            return;
+        }
+        podAnimationId = requestAnimationFrame(draw);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const barWidth = 6;
+        const gap = 4;
+        // Right align calculations
+        const totalWidth = bufferLength * (barWidth + gap);
+        let x = canvas.width - totalWidth;
+        
+        for (let i = 0; i < bufferLength; i++) {
+          const time = Date.now() / 350; 
+          const wave1 = Math.sin((i * 0.6) + time);
+          const wave2 = Math.cos((i * 0.8) - (time * 1.5));
+          let value = 0.4 + ((wave1 + wave2) * 0.3);
+          value = Math.max(0.1, Math.min(1.0, value));
+
+          const barHeight = value * (canvas.height);
+          
+          ctx.fillStyle = "rgba(34, 211, 238, 0.7)";
+          ctx.fillRect(x, (canvas.height - barHeight) / 2, barWidth, barHeight); // Center vertically
+          
+          x += barWidth + gap;
+        }
+      };
+      draw();
+    }
+
+    function togglePodcast() {      const activeVenue = venues.find(v => v.id === state.activeId);
+      if (!activeVenue || activeVenue.type !== 'podcast') return;
+
+      // Mutual exclusion: Stop Global Audio
+      if (isPlaying) stopAudio();
+
+      if (isPodPlaying) {
+        podAudioEl.pause();
+      } else {
+        if (!podAudioEl.src || podAudioEl.src !== activeVenue.podcastUrl) {
+          podAudioEl.src = activeVenue.podcastUrl;
+        }
+        podAudioEl.play().catch(e => console.error(e));
+      }
+    }
+
+    function updatePodcastUI() {
+      const btn = els.podcast.playBtn;
+      if (isPodPlaying) {
+        btn.textContent = "■";
+        els.podcast.status.textContent = "Now Playing";
+      } else {
+        btn.textContent = "▶";
+        els.podcast.status.textContent = podAudioEl.currentTime > 0 ? "Paused" : "Ready to play";
+      }
+    }
+
+    // Podcast Events
+    podAudioEl.addEventListener("play", () => {
+      isPodPlaying = true;
+      updatePodcastUI();
+      drawPodVisualizer();
+    });
+    podAudioEl.addEventListener("pause", () => {
+      isPodPlaying = false;
+      updatePodcastUI();
+    });
+
+    podAudioEl.addEventListener("timeupdate", () => {      if (!podAudioEl.duration) return;
+      const cur = podAudioEl.currentTime;
+      const dur = podAudioEl.duration;
+      
+      els.podcast.current.textContent = formatTime(cur);
+      els.podcast.duration.textContent = formatTime(dur);
+      
+      // Update slider without triggering 'input' event loop
+      const val = (cur / dur) * 100;
+      els.podcast.slider.value = val;
+      
+      // Update background gradient for slider progress visualization
+      const pct = val + "%";
+      els.podcast.slider.style.background = `linear-gradient(to right, var(--accent) ${pct}, rgba(148, 163, 184, 0.2) ${pct})`;
+    });
+
+    podAudioEl.addEventListener("ended", () => {
+      isPodPlaying = false;
+      updatePodcastUI();
+      podAudioEl.currentTime = 0;
+      els.podcast.slider.value = 0;
+      els.podcast.slider.style.background = `rgba(148, 163, 184, 0.2)`;
+    });
+
+    podAudioEl.addEventListener("loadedmetadata", () => {
+      els.podcast.duration.textContent = formatTime(podAudioEl.duration);
+    });
+
+    // Slider Seek
+    els.podcast.slider.addEventListener("input", (e) => {
+      const val = e.target.value;
+      if (podAudioEl.duration) {
+        const time = (val / 100) * podAudioEl.duration;
+        podAudioEl.currentTime = time;
+      }
+      const pct = val + "%";
+      els.podcast.slider.style.background = `linear-gradient(to right, var(--accent) ${pct}, rgba(148, 163, 184, 0.2) ${pct})`;
+    });
+
+    // Wire Play Button
+    els.podcast.playBtn.addEventListener("click", togglePodcast);
+    // Audio Listeners
+    audioEl.addEventListener("ended", () => {
+      stopAudio();
+    });
+
+    audioEl.addEventListener("timeupdate", () => {
+      if (audioEl.duration && els.audio.progressFill) {
+        const pct = (audioEl.currentTime / audioEl.duration) * 100;
+        els.audio.progressFill.style.width = pct + "%";
+      }
+    });
+
+    // Wire global buttons
+    els.audio.introBtn.addEventListener("click", () => {
+      playAudio(introUrl);
+    });
+
+    els.audio.venueBtn.addEventListener("click", () => {
+      const activeVenue = venues.find(v => v.id === state.activeId);
+      if (activeVenue && activeVenue.voUrl) {
+        playAudio(activeVenue.voUrl);
+      }
+    });
+
+    /* --- AUDIO ENGINE END --- */
+
+    function fitLabel(value) {
+      if (value <= 1) return "Very limited";      if (value === 2) return "Guarded";
+      if (value === 3) return "Promising";
+      if (value === 4) return "Strong fit";
+      return "Excellent fit";
+    }
+
+    function valueLabel(value) {
+      if (value >= 5) return "Excellent value";
+      if (value === 4) return "Favorable";
+      if (value === 3) return "Balanced";
+      if (value === 2) return "High cost";
+      return "Very high cost / tough ROI";
+    }
+
+    function setBar(fillEl, value, options = {}) {
+      const pct = Math.max(0, Math.min(5, value)) * 20;
+      fillEl.style.width = pct + "%";
+      fillEl.classList.remove("low", "caution");
+      if (options.mode === "self") {
+        if (value <= 1) fillEl.classList.add("low");
+        else if (value <= 2) fillEl.classList.add("caution");
+      }
+      if (options.mode === "value") {
+        if (value <= 2) fillEl.classList.add("caution");
+      }
+    }
+
+    function buildCarousel(images, isPodcast) {
+      els.carousel.innerHTML = "";
+      if (!images || images.length === 0) return;
+
+      // Special handling for Podcast 1:1 image
+      if (isPodcast) {
+        const frame = document.createElement("div");
+        frame.className = "podcast-hero-frame";
+        const img = document.createElement("img");
+        img.src = images[0];
+        img.className = "podcast-hero-img active";
+        frame.appendChild(img);
+        els.carousel.appendChild(frame);
+        
+        if (state.carouselTimer) clearInterval(state.carouselTimer);
+        return;
+      }
+
+      images.forEach((src, idx) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "Venue visual reference";
+        if (idx === 0) img.classList.add("active");
+        els.carousel.appendChild(img);
+      });
+
+      state.carouselIndex = 0;
+      if (state.carouselTimer) clearInterval(state.carouselTimer);
+
+      const imgs = els.carousel.querySelectorAll("img");
+      if (imgs.length <= 1) return;
+
+      state.carouselTimer = setInterval(() => {
+        state.carouselIndex = (state.carouselIndex + 1) % imgs.length;
+        imgs.forEach((img, idx) => {
+          img.classList.toggle("active", idx === state.carouselIndex);
+        });
+      }, 6000);
+    }
+    function renderVenue(id) {
+      const venue = venues.find((v) => v.id === id);
+      if (!venue) return;
+
+      state.activeId = id;
+      const detailShell = document.querySelector(".detail-shell");
+
+      els.cards.forEach((card) => {
+        card.classList.toggle(
+          "active",
+          card.getAttribute("data-venue-id") === id
+        );
+      });
+
+      // Toggle Mode
+      if (venue.type === "podcast") {
+        detailShell.classList.add("mode-podcast");
+        detailShell.classList.remove("mode-venue");
+      } else {
+        detailShell.classList.add("mode-venue");
+        detailShell.classList.remove("mode-podcast");
+      }
+
+      els.name.textContent = venue.name;
+      els.location.textContent = venue.location;
+      els.headline.textContent = venue.headline;
+
+      buildCarousel(venue.images, venue.type === "podcast");
+
+      els.tagsRow.innerHTML = "";
+      (venue.tags || []).forEach((tag, idx) => {
+        const span = document.createElement("span");
+        span.className = "pill" + (idx === 0 ? " pill-accent" : "");        span.textContent = tag;
+        els.tagsRow.appendChild(span);
+      });
+
+      function fillList(container, items) {
+        container.innerHTML = "";
+        (items || []).forEach((text) => {
+          const li = document.createElement("li");
+          li.textContent = text;
+          container.appendChild(li);
+        });
+      }
+
+      fillList(els.atAGlance, venue.atAGlance);
+      fillList(els.bestFor, venue.bestFor);
+      fillList(els.pros, venue.pros);
+      fillList(els.cons, venue.cons);
+      fillList(els.alignmentNotes, venue.alignmentNotes);
+
+      els.selfPleasure.textContent = venue.selfPleasure || "";
+      els.valuePropText.textContent = venue.valuePropText || "";
+
+      const s = venue.alignmentScores || {};
+      const ws = s.workshops ?? 0;
+      const ins = s.intensives ?? 0;
+      const im = s.immersions ?? 0;
+      const sp = s.selfPleasure ?? 0;
+      const nv = s.nature ?? 0;
+      const vp = s.valueProp ?? 0;
+
+      setBar(els.score.workshopsFill, ws);
+      setBar(els.score.intensivesFill, ins);
+      setBar(els.score.immersionsFill, im);
+      setBar(els.score.selfFill, sp, { mode: "self" });
+      setBar(els.score.natureFill, nv);
+      setBar(els.score.valueFill, vp, { mode: "value" });
+
+      els.score.workshopsLabel.textContent = fitLabel(ws);
+      els.score.intensivesLabel.textContent = fitLabel(ins);
+      els.score.immersionsLabel.textContent = fitLabel(im);
+      els.score.selfLabel.textContent = fitLabel(sp);
+      els.score.natureLabel.textContent = fitLabel(nv);
+      els.score.valueLabel.textContent = valueLabel(vp);
+
+      els.links.innerHTML = "";
+      const urls = venue.urls || {};
+
+      /* Ensure UI is synced if venue changes while playing */
+      updateAudioUI();
+      // Update Podcast Download Link
+      if (venue.type === "podcast" && els.podcast.download) {
+        els.podcast.download.href = venue.podcastUrl;
+      }
+      const linkConfigs = [
+        { key: "official", label: "Official site", icon: "◆" },        { key: "amenities", label: "Amenities", icon: "☰" },
+        { key: "events", label: "Events", icon: "✦" },
+        { key: "unofficialMain", label: "Overview", icon: "◎" },
+        { key: "generalInfo", label: "Resort info", icon: "ⓘ" },
+        { key: "festivalCall", label: "Festival / workshops", icon: "✉" },
+        { key: "socials", label: "Socials", icon: "♾" },
+        { key: "musicBar", label: "Lakeside bar", icon: "♫" },
+        { key: "mapsPlace", label: "Google Maps", icon: "📍" }
+      ];
+
+      linkConfigs.forEach((cfg) => {
+        const url = urls[cfg.key];
+        if (!url) return;
+        const a = document.createElement("a");
+        a.className = "link-chip";
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.innerHTML = `<span>${cfg.icon}</span><span>${cfg.label}</span>`;
+        els.links.appendChild(a);
+      });
+
+      if (venue.map && els.mapButton && els.mapButtonLabel && els.mapDistance) {
+        els.mapButtonLabel.textContent =
+          venue.map.label || `Open ${venue.name} on Google Maps`;
+        els.mapDistance.textContent = venue.map.distance || "";
+        els.mapCaption.innerHTML =
+          venue.map.caption ||
+          "Opens the venue’s Google Maps place page; distance estimate uses West Palm Beach, FL as a reference.";
+        els.mapButton.onclick = () => {
+          window.open(venue.map.url, "_blank", "noopener,noreferrer");
+        };
+      } else {
+        els.mapCaption.innerHTML =
+          "Opens the venue’s Google Maps place page.";
+      }
+    }
+
+    els.cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const id = card.getAttribute("data-venue-id");
+        renderVenue(id);
+      });
+      card.addEventListener("keydown", (evt) => {
+        if (evt.key === "Enter" || evt.key === " ") {
+          evt.preventDefault();
+          const id = card.getAttribute("data-venue-id");
+          renderVenue(id);
+        }
+      });
+    });
+
+    els.criteriaToggle.addEventListener("click", () => {
+      els.criteriaPanel.classList.toggle("active");
+    });
+
+    renderVenue(state.activeId);
+  </script>
+</body>
+</html>
